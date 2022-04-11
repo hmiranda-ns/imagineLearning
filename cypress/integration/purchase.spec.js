@@ -41,7 +41,7 @@ context("Purchase test", () => {
       // product.getProductPrice().should('have.text', price)
     })
 
-    it.only('Elements are sorted out by price', function(){
+    it('Elements are sorted out by price', function(){
       let prices = []
 
       prices = inventory.getAllInventoryItemPrices()
