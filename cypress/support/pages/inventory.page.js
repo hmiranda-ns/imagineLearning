@@ -12,6 +12,15 @@ export class InventoryPage{
   getInventoryItemList(){
     return cy.get('.inventory_list')
   }
+
+  getInventoryItemPrice(item){
+    cy.contains('.inventory_item', item).within(() =>{
+      cy.get('.inventory_item_price').invoke('text').then((r) => {
+        return r;  
+      })
+    })
+  }
+  
   getAllInventoryItemPrices(){
     let unsortedPrice = []
       let sortedPrice = []

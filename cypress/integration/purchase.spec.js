@@ -28,14 +28,12 @@ context("Purchase test", () => {
       inventory.getInventoryItemList().should('contain', this.items.brand)
     })
 
-    it('Confirm price is the same on inventory and product page', function() {
+    it.only('Confirm price is the same on inventory and product page', function() {
       let item = this.items.backpack.name
       let price = ''
-      cy.contains('.inventory_item', item).within(() =>{
-        price = cy.get('.inventory_item_price').invoke('text')
-      })
-      
-      cy.log(price)
+
+      price = inventory.getInventoryItemPrice(item)
+      // cy.log(price)
 
       // inventory.getInventoryItemLink(item).click()
       // product.getProductPrice().should('have.text', price)
