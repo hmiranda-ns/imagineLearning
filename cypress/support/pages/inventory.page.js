@@ -14,35 +14,54 @@ export class InventoryPage{
   }
 
   getInventoryItemPrice(item){
-    cy.contains('.inventory_item', item).within(() =>{
-      cy.get('.inventory_item_price').invoke('text').then((r) => {
-        return r;  
-      })
-    })
+    return cy.contains('.inventory_item', item).find('.inventory_item_price')
   }
-  
+
   getAllInventoryItemPrices(){
     let unsortedPrice = []
       let sortedPrice = []
       let num = 0
       let str = ''
       cy.get('.inventory_list > .inventory_item').within(() => {
-        cy.get('.inventory_item_price').each((elem) => {
-          // str = elem.text()
-          // num = parseFloat(str.replace("$", ""))
+        cy.get('.inventory_item_price').invoke('text').each((elem) => {
+          str = elem.text()
+          num = parseFloat(str.replace("$", ""))
           unsortedPrice.push(elem)
         })
       })
+      cy.log('get all prices')
+      cy.log(unsortedPrice)
       return unsortedPrice
   }
 
-  assertInventoryPricesSorted(inventoryPrices){
-    inventoryPrices.forEach((element, index) => {
-      if(element < inventoryPrices[index + 1]) {
-        return false
+  selectProductSort(sort){
+    let option = sort == 'high to low' ? 'hilo' : 'lohi';
+    return cy.get('.product_sort_container').select(option)
+  }
+
+  assertInventoryPricesSorted(sort){
+   let option = sort == 'high to low' ? false : true;
+   let sorted = []
+   let unsorted = []
+
+    cy.get(".inventory_item_price").then(($els) => {
+      let texts = Array.from($els, el => el.innerText)
+
+      texts.forEach((str) => {
+        unsorted.push(parseFloat(str.replace("$", "")))
+      })
+      unsorted.pop()
+      sorted = unsorted
+
+      if(option){
+        sorted.sort( (a,b) => a-b )
       }
+      else{
+        sorted.sort( (a,b) => b-a )
+      }
+
+      expect(unsorted).to.eq(sorted)
     })
-    return true
   }
 
   getInventoryItemLinks(){

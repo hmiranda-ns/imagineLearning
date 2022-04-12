@@ -28,25 +28,17 @@ context("Purchase test", () => {
       inventory.getInventoryItemList().should('contain', this.items.brand)
     })
 
-    it.only('Confirm price is the same on inventory and product page', function() {
+    it('Confirm price is the same on inventory and product page', function() {
       let item = this.items.backpack.name
-      let price = ''
 
-      price = inventory.getInventoryItemPrice(item)
-      // cy.log(price)
-
-      // inventory.getInventoryItemLink(item).click()
-      // product.getProductPrice().should('have.text', price)
+      product.assertInventoryProductPrice(item)
     })
 
     it('Elements are sorted out by price', function(){
-      let prices = []
+      let sort = 'low to high'
 
-      prices = inventory.getAllInventoryItemPrices()
-      cy.log(prices)
-
-      inventory.assertInventoryPricesSorted(prices)
-      
+      inventory.selectProductSort(sort)
+      inventory.assertInventoryPricesSorted(sort)
     })
 
     it('Add product to cart and complete checkout', function(){
